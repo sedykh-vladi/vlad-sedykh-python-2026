@@ -19,3 +19,5 @@ def find_duplicate_payments(df: pd.DataFrame, gap_minutes: int = 20) -> pd.DataF
 def find_nonpositive_amounts(df: pd.DataFrame) -> pd.DataFrame:
     """Покупки с невозможной суммой.""aa"""
     return df[df["amount"] < 0 ]
+
+    

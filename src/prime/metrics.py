@@ -31,3 +31,17 @@ def churn_rate(subs: pd.DataFrame, start: str, end: str) -> float:
     start, end = pd.Timestamp(start, tz="UTC"), pd.Timestamp(end, tz="UTC")
     active = subs[active_on(subs, start)]
     return (active["ended_at"] < end).sum() / len(active)
+
+
+def daily_churn(churn: float, days: int) -> float:
+    """Средний дневной отток из оттока за период длиной days дней.
+
+    Доли не делят на дни, а перемножают (как годовой отток на Л5: (1 - отток) ** 12).
+    Если за период осталась доля (1 - churn), то каждый день в среднем остаётся (1 - churn) ** (1 / days).
+    """
+    return 1 - (1 - churn) ** (1 / days)
+
+
+def churn_30d(daily: float) -> float:
+    """Отток в пересчёте на 30 дней из среднего дневного оттока: так месяцы разной длины сравнимы."""
+    return 1 - (1 - daily) ** 30
